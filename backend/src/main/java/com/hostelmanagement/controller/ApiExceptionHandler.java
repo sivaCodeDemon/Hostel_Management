@@ -1,0 +1,3 @@
+package com.hostelmanagement.controller;
+import org.springframework.http.*; import org.springframework.web.bind.annotation.*; import java.time.*; import java.util.*;
+@RestControllerAdvice public class ApiExceptionHandler { @ExceptionHandler(NoSuchElementException.class) public ResponseEntity<?> notFound(Exception e){return body(404,e.getMessage());} @ExceptionHandler({IllegalStateException.class,IllegalArgumentException.class}) public ResponseEntity<?> conflict(Exception e){return body(409,e.getMessage());} private ResponseEntity<Map<String,Object>> body(int status,String message){Map<String,Object> m=new LinkedHashMap<>();m.put("timestamp",LocalDateTime.now());m.put("status",status);m.put("message",message);return ResponseEntity.status(status).body(m);} }

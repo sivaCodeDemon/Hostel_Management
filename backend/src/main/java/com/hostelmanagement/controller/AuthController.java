@@ -1,0 +1,8 @@
+package com.hostelmanagement.controller;
+import com.hostelmanagement.dto.AuthDtos; import com.hostelmanagement.entity.User; import com.hostelmanagement.repository.UserRepository; import com.hostelmanagement.security.JwtService;
+import org.springframework.http.*; import org.springframework.security.crypto.password.PasswordEncoder; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/api/auth")
+public class AuthController { private final UserRepository users; private final PasswordEncoder encoder; private final JwtService jwt; public AuthController(UserRepository users,PasswordEncoder encoder,JwtService jwt){this.users=users;this.encoder=encoder;this.jwt=jwt;}
+ @PostMapping("/register") public ResponseEntity<?> register(@RequestBody AuthDtos.Register r){ if(users.findByEmail(r.getEmail()).isPresent()) return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("message","Email already registered")); User u=new User(r.getEmail(),encoder.encode(r.getPassword())); users.save(u); return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("token",jwt.generate(u.getEmail()))); }
+ @PostMapping("/login") public ResponseEntity<?> login(@RequestBody AuthDtos.Login r){ return users.findByEmail(r.getEmail()).filter(u->encoder.matches(r.getPassword(),u.getPassword())).<ResponseEntity<?>>map(u->ResponseEntity.ok(new HashMap<String,Object>(){{put("token",jwt.generate(u.getEmail()));put("email",u.getEmail());put("role",u.getRole());}})).orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message","Invalid email or password"))); }
+}

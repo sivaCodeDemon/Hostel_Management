@@ -1,0 +1,11 @@
+com\hostelmanagement\entity\ResidentStatus.class
+com\hostelmanagement\entity\Floor.class
+com\hostelmanagement\HostelManagementApplication.class
+com\hostelmanagement\entity\Room.class
+com\hostelmanagement\entity\Bed.class
+com\hostelmanagement\entity\PaymentMethod.class
+com\hostelmanagement\entity\RentRecord.class
+com\hostelmanagement\entity\BedStatus.class
+com\hostelmanagement\entity\PaymentStatus.class
+com\hostelmanagement\entity\Resident.class
+com\hostelmanagement\entity\RoomStatus.class
